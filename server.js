@@ -43,8 +43,8 @@ if (cluster.isMaster) {
       case req.url === '/blogImages':
         storeFiles(req, res, 'blogs');
         return;
-      case req.url === '/albums':
-        storeFiles(req, res, 'album');
+      case req.url === '/albumImages' && req.method === "POST":
+        storeFiles(req, res, 'albums');
         return;
       case req.url === '/blogMd':
         storeFiles(req, res, 'blogs')

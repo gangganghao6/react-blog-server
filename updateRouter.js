@@ -4,15 +4,26 @@ const {updateState, storeFilesThrowPath} = require("./utils");
 const blogRouter = jsonServer.router('./db.json')
 module.exports = function updateRouter(req, res, next) {
   let state = blogRouter.db.read().__wrapped__;
+  let path;
   switch (true) {
     case req.url === '/updateInfoViews' && req.method === 'PATCH':
       state.info.visitCount++;
       updateState(blogRouter, state)
       res.send();
       return;
-    case req.url.includes('/updateBlogMd') && req.method === 'PATCH':
-      let {path} = req.query;
+    case req.url.includes('/updateBlogImages') && req.method === 'PATCH':
+      ({path} = req.query)
       storeFilesThrowPath(req, res, 'blogs', path)
+      // updateState(blogRouter, state)
+      return;
+    case req.url.includes('/updateBlogMd') && req.method === 'PATCH':
+      ({path} = req.query)
+      storeFilesThrowPath(req, res, 'blogs', path)
+      // updateState(blogRouter, state)
+      return;
+    case req.url.includes('/updateAlbums') && req.method === 'PATCH':
+      ({path} = req.query)
+      storeFilesThrowPath(req, res, 'albums', path)
       // updateState(blogRouter, state)
       return;
     case req.url === '/updateBlogViews' && req.method === 'PATCH':
@@ -47,6 +58,14 @@ module.exports = function updateRouter(req, res, next) {
       if (!state.tags.includes(req.body.tag)) {
         state.tags.push(req.body.tag);
       }
+      updateState(blogRouter, state)
+      res.send();
+      return;
+    case req.url === '/deleteTags' && req.method === 'PATCH':
+      let {tag} = req.body;
+      let index = state.tags.indexOf(tag)
+      state.tags.splice(index, 1)
+      console.log(tag)
       updateState(blogRouter, state)
       res.send();
       return;

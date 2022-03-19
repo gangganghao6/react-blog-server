@@ -73,7 +73,7 @@ function storeFiles(req, res, type) {
 }
 
 function storeFilesThrowPath(req, res, type, date) {
-  createMkdr(type,date)
+  createMkdrThrowPath(type,date)
   let filePath = path.join(path.join(localConfig.publicPath, type), date)
   let form = new formidable.IncomingForm()
   let fileNames = []
@@ -85,7 +85,7 @@ function storeFilesThrowPath(req, res, type, date) {
   form.parse(req, async (err, fields, files) => {
     let length = Object.keys(files).length;
     let fileKeyNames = Object.keys(files)
-    console.log(fileKeyNames)
+    // console.log(fileKeyNames)
     for (let i = 0; i < length; i++) {
       let username = fileKeyNames[i]
       let fileName = fileKeyNames[i];
