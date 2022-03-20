@@ -43,7 +43,7 @@ if (cluster.isMaster) {
       case req.url === '/blogImages':
         storeFiles(req, res, 'blogs');
         return;
-      case req.url === '/albumImages' && req.method === "POST":
+      case req.url === '/albumImages':
         storeFiles(req, res, 'albums');
         return;
       case req.url === '/blogMd':
@@ -58,7 +58,7 @@ if (cluster.isMaster) {
     next();
   })
   server.use(blogRouter)
-  server.listen(3000, () => {
+  server.listen(8082, () => {
   })
 }
 

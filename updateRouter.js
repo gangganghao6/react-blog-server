@@ -35,6 +35,15 @@ module.exports = function updateRouter(req, res, next) {
       updateState(blogRouter, state)
       res.send();
       return;
+    case req.url === '/updateAlbumViews' && req.method === 'PATCH':
+      state.albums.forEach((item) => {
+        if (item.id === parseInt(req.body.id)) {
+          item.views++;
+        }
+      });
+      updateState(blogRouter, state)
+      res.send();
+      return;
     case req.url === '/updateInfoComments' && req.method === 'PATCH':
       state.info.commentCount++;
       updateState(blogRouter, state)
@@ -65,10 +74,16 @@ module.exports = function updateRouter(req, res, next) {
       let {tag} = req.body;
       let index = state.tags.indexOf(tag)
       state.tags.splice(index, 1)
-      console.log(tag)
       updateState(blogRouter, state)
       res.send();
       return;
+    case req.url === '/updateFooter' && req.method === 'PATCH':
+      let {footers} = req.body;
+      state.footer = footers;
+      updateState(blogRouter, state)
+      res.send();
+      return;
+
     default:
       break;
   }
