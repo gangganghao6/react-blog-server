@@ -55,7 +55,6 @@ function storeFiles(req, res, type) {
   form.parse(req, async (err, fields, files) => {
     let length = Object.keys(files).length;
     let fileKeyNames = Object.keys(files)
-    console.log(fileKeyNames)
     for (let i = 0; i < length; i++) {
       let username = fileKeyNames[i]
       // console.log(files[username].mimetype)
