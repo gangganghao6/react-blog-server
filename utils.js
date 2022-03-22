@@ -60,12 +60,12 @@ function storeFiles(req, res, type) {
       // console.log(files[username].mimetype)
       // let fileName = await createFileHash256(files[username].filepath) + "." + files[username].mimetype.split('/')[1]
       let fileName = fileKeyNames[i];
-      fs.rename(files[username].filepath, path.join(filePath, fileName), function (err) {
-        if (err) {
-          throw Error("改名失败");
-        }
-      })
-      fileNames.push(`/${type}/${date}/${fileName}`)
+      try {
+        fs.renameSync(files[username].filepath, path.join(filePath, fileName))
+      }catch (e) {
+
+      }
+      fileNames.push(`${localConfig.url}${type}/${date}/${fileName}`)
     }
     res.json(fileNames)
   })
@@ -84,16 +84,15 @@ function storeFilesThrowPath(req, res, type, date) {
   form.parse(req, async (err, fields, files) => {
     let length = Object.keys(files).length;
     let fileKeyNames = Object.keys(files)
-    // console.log(fileKeyNames)
     for (let i = 0; i < length; i++) {
       let username = fileKeyNames[i]
       let fileName = fileKeyNames[i];
-      fs.rename(files[username].filepath, path.join(filePath, fileName), function (err) {
-        if (err) {
-          throw Error("改名失败");
-        }
-      })
-      fileNames.push(`/${type}/${date}/${fileName}`)
+      try{
+        fs.renameSync(files[username].filepath, path.join(filePath, fileName))
+      }catch (e) {
+
+      }
+      fileNames.push(`${localConfig.url}${type}/${date}/${fileName}`)
     }
     res.json(fileNames)
   })

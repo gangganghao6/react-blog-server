@@ -4,7 +4,7 @@ const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const middlewares = jsonServer.defaults({static: localConfig.publicPath})
 const blogRouter = jsonServer.router('./db.json')
-const {postImages, storeFiles, storeMds, updateState} = require('./utils')
+const {storeFiles} = require('./utils')
 const updateRouter = require("./updateRouter");
 if (cluster.isMaster) {
   for (let i = 0; i < numCPUs; i++) {
