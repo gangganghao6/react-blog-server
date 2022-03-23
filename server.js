@@ -1,12 +1,15 @@
+const {storeFiles, init} = require('./utils')
+init();
 const jsonServer = require('json-server')
 const localConfig = require('./localConfig.json')
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const middlewares = jsonServer.defaults({static: localConfig.publicPath})
 const blogRouter = jsonServer.router('./db.json')
-const {storeFiles} = require('./utils')
 const updateRouter = require("./updateRouter");
+
 if (cluster.isMaster) {
+
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
@@ -34,11 +37,6 @@ if (cluster.isMaster) {
   }))
   server.use(updateRouter);
   server.use((req, res, next) => {
-    // if(req.url==='/user'){
-    //     req.method = 'GET';
-    // }
-    // req.url = req.url.slice(4);
-    let state = blogRouter.db.read().__wrapped__;
     switch (true) {
       case req.url === '/blogImages':
         storeFiles(req, res, 'blogs');

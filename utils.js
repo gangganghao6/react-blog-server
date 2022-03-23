@@ -6,21 +6,21 @@ const formidable = require("formidable");
 const localConfig = require('./localConfig.json')
 
 
-function createFileHash256(fileName) {
-  //从文件创建一个可读流
-  return new Promise((resolve, reject) => {
-    const stream = fs.createReadStream(fileName);
-    const fsHash = crypto.createHash('sha256');
-
-    stream.on('data', function (d) {
-      fsHash.update(d);
-    });
-    stream.on('end', function () {
-      const md5 = fsHash.digest('hex');
-      resolve(md5);
-    });
-  })
-}
+// function createFileHash256(fileName) {
+//   //从文件创建一个可读流
+//   return new Promise((resolve, reject) => {
+//     const stream = fs.createReadStream(fileName);
+//     const fsHash = crypto.createHash('sha256');
+//
+//     stream.on('data', function (d) {
+//       fsHash.update(d);
+//     });
+//     stream.on('end', function () {
+//       const md5 = fsHash.digest('hex');
+//       resolve(md5);
+//     });
+//   })
+// }
 
 
 function createMkdr(type) {
@@ -62,7 +62,7 @@ function storeFiles(req, res, type) {
       let fileName = fileKeyNames[i];
       try {
         fs.renameSync(files[username].filepath, path.join(filePath, fileName))
-      }catch (e) {
+      } catch (e) {
 
       }
       fileNames.push(`${localConfig.url}${type}/${date}/${fileName}`)
@@ -72,7 +72,7 @@ function storeFiles(req, res, type) {
 }
 
 function storeFilesThrowPath(req, res, type, date) {
-  createMkdrThrowPath(type,date)
+  createMkdrThrowPath(type, date)
   let filePath = path.join(path.join(localConfig.publicPath, type), date)
   let form = new formidable.IncomingForm()
   let fileNames = []
@@ -87,9 +87,9 @@ function storeFilesThrowPath(req, res, type, date) {
     for (let i = 0; i < length; i++) {
       let username = fileKeyNames[i]
       let fileName = fileKeyNames[i];
-      try{
+      try {
         fs.renameSync(files[username].filepath, path.join(filePath, fileName))
-      }catch (e) {
+      } catch (e) {
 
       }
       fileNames.push(`${localConfig.url}${type}/${date}/${fileName}`)
@@ -113,9 +113,102 @@ function updateState(blogRouter, state) {
 //   // let src = 'data: image/' + type + ';base64,' + buffer.toString('base64');
 //   // res.send(src)
 // }
+function init() {
+  if (!fs.existsSync(localConfig.publicPath)) {
+    fs.mkdirSync(localConfig.publicPath)
+    fs.mkdirSync(path.join(localConfig.publicPath, 'albums'))
+    fs.mkdirSync(path.join(localConfig.publicPath, 'blogs'))
+    fs.mkdirSync(path.join(localConfig.publicPath, 'websiteImages'))
+  } else {
+    if (!fs.existsSync(path.join(localConfig.publicPath, 'blogs'))) {
+      fs.mkdirSync(path.join(localConfig.publicPath, 'blogs'))
+    }
+    if (!fs.existsSync(path.join(localConfig.publicPath, 'albums'))) {
+      fs.mkdirSync(path.join(localConfig.publicPath, 'albums'))
+    }
+    if (!fs.existsSync(path.join(localConfig.publicPath, 'websiteImages'))) {
+      fs.mkdirSync(path.join(localConfig.publicPath, 'websiteImages'))
+    }
+  }
+  if (!fs.existsSync(path.join(__dirname, "db.json"))) {
+    let obj = {
+      blogs: [{
+        "type": 1,
+        "title": "",
+        "content": "",
+        "time": +new Date(),
+        "recommend": true,
+        "images": [],
+        "comments": [],
+        "tags": "",
+        "post": "",
+        "lastModified": +new Date(),
+        "views": 0,
+        "id": 1
+      },],
+      albums: [],
+      timeLine: [],
+      tags: [],
+      info: {},
+      password: ["123456"],
+      footer: [{
+        "id": 1,
+        "post": "",
+        "title": "大标题",
+        "items": [
+          {
+            "title": "标题",
+            "url": "",
+            "description": "描述"
+          },
+          {
+            "title": "标题",
+            "url": "",
+            "description": "描述"
+          }, {
+            "title": "标题",
+            "url": "",
+            "description": "描述"
+          }, {
+            "title": "标题",
+            "url": "",
+            "description": "描述"
+          }
+        ]
+      },
+        {
+          "id": 2,
+          "post": "",
+          "title": "大标题",
+          "items": [
+            {
+              "title": "标题",
+              "url": "",
+              "description": "描述"
+            },
+            {
+              "title": "标题",
+              "url": "",
+              "description": "描述"
+            }, {
+              "title": "标题",
+              "url": "",
+              "description": "描述"
+            }, {
+              "title": "标题",
+              "url": "",
+              "description": "描述"
+            }
+          ]
+        }]
+    }
+    fs.writeFileSync(path.join(__dirname, "db.json"), JSON.stringify(obj))
+  }
+}
 
 module.exports = {
   storeFiles,
   updateState,
-  storeFilesThrowPath
+  storeFilesThrowPath,
+  init
 }
