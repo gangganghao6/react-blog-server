@@ -64,3 +64,4 @@
 *.max
 
 .idea
+/node_modules/*
