@@ -56,7 +56,7 @@ if (cluster.isMaster) {
     next();
   })
   server.use(blogRouter)
-  server.listen(8082, () => {
+  server.listen(parseInt(localConfig.url.split(':')[2]), () => {
   })
 }
 

@@ -67,6 +67,7 @@ module.exports = function updateRouter(req, res, next) {
       if (!state.tags.includes(req.body.tag)) {
         state.tags.push(req.body.tag);
       }
+      console.log(blogRouter.db._)
       updateState(blogRouter, state)
       res.send();
       return;
@@ -76,6 +77,9 @@ module.exports = function updateRouter(req, res, next) {
       state.tags.splice(index, 1)
       updateState(blogRouter, state)
       res.send();
+      return;
+    case req.url === '/tags' && req.method === 'GET':
+      res.send(state.tags);
       return;
     case req.url === '/updateFooter' && req.method === 'PATCH':
       let {footers} = req.body;
