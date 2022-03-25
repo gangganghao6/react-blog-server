@@ -35,7 +35,7 @@ if (cluster.isMaster) {
     '/my/*': '/my/$1',
     // '/img/*': '/img/$1'
   }))
-  server.use(updateRouter);
+  server.use(updateRouter(blogRouter));
   server.use((req, res, next) => {
     switch (true) {
       case req.url === '/blogImages':
