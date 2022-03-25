@@ -7,6 +7,8 @@
   },
   "scripts": {
     "json:server": "json-server --watch db.json --host 127.0.0.1 --port 3000",
-    "start": "pm2 start server.js"
+    "start": "pm2 start server.js",
+    "stop": "pm2 stop server.js",
+    "dev": "node server.js"
   }
 }
